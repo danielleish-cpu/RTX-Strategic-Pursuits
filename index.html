@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTX Strategic Pursuits</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--navy:#0a1628;--navy-light:#111d33;--navy-mid:#162240;--navy-card:#1a2744;
+--glean-blue:#0071e3;--glean-purple:#5e5ce6;--accent-gradient:linear-gradient(135deg,#0071e3,#5e5ce6);
+--green:#34c759;--amber:#ff9f0a;--red:#ff453a;--text:#f5f5f7;--text-sec:#8e8e93;
+--card-light:#ffffff;--card-border:#e5e5ea;--text-dark:#1d1d1f;--text-dark-sec:#6e6e73;
+--sidebar-w:48px;--sidebar-exp:200px;--topbar-h:52px;
+--raytheon:#8b5cf6;--collins:#3b82f6;--pw:#f59e0b;
+}
+html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;font-size:13px;color:var(--text);background:var(--navy)}
+body{min-height:100vh;overflow-x:hidden}
+a{color:var(--glean-blue);text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input{font-family:inherit;font-size:inherit}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:var(--navy);border-right:1px solid rgba(255,255,255,.06);z-index:100;display:flex;flex-direction:column;transition:width .25s ease;overflow:hidden}
+.sidebar.expanded{width:var(--sidebar-exp)}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:12px 12px;cursor:pointer;white-space:nowrap;position:relative;transition:background .15s}
+.sidebar-item:hover{background:rgba(255,255,255,.04)}
+.sidebar-item.active{background:rgba(0,113,227,.1)}
+.sidebar-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--glean-blue);border-radius:0 2px 2px 0}
+.sidebar-item svg{flex-shrink:0;width:22px;height:22px;opacity:.7}
+.sidebar-item.active svg{opacity:1}
+.sidebar-label{font-size:12.5px;opacity:0;transition:opacity .2s;letter-spacing:-.01em}
+.sidebar.expanded .sidebar-label{opacity:1}
+.sidebar-divider{height:1px;background:rgba(255,255,255,.06);margin:6px 12px}
+.sidebar-spacer{flex:1}
+.sidebar-toggle{padding:10px 12px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.4;transition:opacity .15s}
+.sidebar-toggle:hover{opacity:.8}
+.sidebar-toggle svg{transition:transform .25s}
+.sidebar.expanded .sidebar-toggle svg{transform:rotate(180deg)}
+.sidebar-item[data-tooltip]{position:relative}
+.sidebar:not(.expanded) .sidebar-item[data-tooltip]:hover::after{
+content:attr(data-tooltip);position:absolute;left:52px;top:50%;transform:translateY(-50%);
+background:#1d1d1f;color:#fff;padding:4px 10px;border-radius:6px;font-size:11.5px;white-space:nowrap;z-index:200;pointer-events:none}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--navy);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;padding:0 20px;z-index:90;transition:left .25s}
+body.sidebar-open .topbar{left:var(--sidebar-exp)}
+.topbar-left{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.rtx-logo{display:flex;align-items:center;font-weight:700;font-size:17px;letter-spacing:1.5px}
+.topbar-divider{width:1px;height:24px;background:rgba(255,255,255,.12)}
+.powered-by{font-size:11px;color:var(--text-sec);font-weight:400;letter-spacing:.01em;opacity:.6}
+.view-label{color:var(--text-sec);font-size:12px;margin-left:8px;letter-spacing:.02em}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.scope-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-size:12px;transition:background .15s}
+.scope-btn:hover{background:rgba(255,255,255,.05)}
+.scope-btn svg{width:14px;height:14px;opacity:.6}
+.refresh-tag{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-sec)}
+.refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.topbar-search{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:5px 10px 5px 30px;color:var(--text);width:180px;font-size:12px;outline:none;transition:border-color .15s,width .2s;position:relative}
+.topbar-search:focus{border-color:var(--glean-blue);width:240px}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:14px;height:14px;opacity:.4;pointer-events:none}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.02em}
+
+/* CONTEXT BANNER (Edit 7) */
+.context-banner{background:rgba(0,113,227,.05);border-left:3px solid var(--glean-blue);padding:10px 20px;font-size:12px;color:var(--text-sec);line-height:1.5;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.context-banner-text{flex:1}
+.context-banner .dismiss{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;opacity:.5;transition:opacity .15s;flex-shrink:0}
+.context-banner .dismiss:hover{opacity:1}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);padding-top:var(--topbar-h);min-height:100vh;transition:margin-left .25s}
+body.sidebar-open .main{margin-left:var(--sidebar-exp)}
+.view{display:none;animation:fadeIn .3s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:18px 24px 12px}
+.kpi-card{background:var(--navy-card);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px 16px}
+.kpi-label{font-size:11px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.kpi-value{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi-sub{font-size:11px;color:var(--text-sec);margin-top:4px}
+.kpi-sub.green{color:var(--green)}.kpi-sub.red{color:var(--red)}
+.kpi-value.red{color:var(--red)}
+
+/* TABS & FILTERS */
+.tabs-bar{display:flex;align-items:center;padding:8px 24px;gap:6px;flex-wrap:wrap}
+.tab-pill{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid rgba(255,255,255,.1);transition:all .15s;color:var(--text-sec)}
+.tab-pill:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.tab-pill.active{background:var(--glean-blue);border-color:var(--glean-blue);color:#fff}
+.filter-spacer{flex:1}
+.bu-filter{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:5px;transition:background .15s}
+.bu-filter:hover{background:rgba(255,255,255,.05)}
+
+/* TABLE */
+.table-wrap{padding:0 24px 24px}
+.prism-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card-light);border-radius:10px;overflow:hidden;color:var(--text-dark)}
+.prism-table th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;text-align:left;font-weight:600;color:var(--text-dark-sec);border-bottom:1px solid var(--card-border);background:#f9f9fb}
+.prism-table th.ai-col{background:linear-gradient(180deg,rgba(0,113,227,.06),rgba(94,92,230,.04));position:relative}
+.prism-table th.ai-col::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-gradient)}
+.prism-table td{padding:10px 12px;border-bottom:1px solid #f0f0f2;font-size:12.5px;vertical-align:middle}
+.prism-table tr.data-row{cursor:pointer;transition:background .1s}
+.prism-table tr.data-row:hover{background:#f5f7ff}
+.pursuit-name{font-weight:600;display:flex;align-items:center;gap:6px}
+.chevron{width:14px;height:14px;transition:transform .2s;opacity:.4;flex-shrink:0}
+tr.data-row.expanded .chevron{transform:rotate(90deg)}
+.bu-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:600;color:#fff}
+.bu-badge.raytheon{background:var(--raytheon)}.bu-badge.collins{background:var(--collins)}.bu-badge.pw{background:var(--pw)}
+.stage-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:500}
+.stage-pill.capture{background:#e8f5e9;color:#2e7d32}.stage-pill.proposal{background:#e3f2fd;color:#1565c0}
+.stage-pill.evaluation{background:#fff3e0;color:#e65100}.stage-pill.awarded{background:#f3e5f5;color:#7b1fa2}
+.stage-pill.debrief{background:#fbe9e7;color:#bf360c}
+.health-dot{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot.green{background:var(--green)}.dot.yellow{background:var(--amber)}.dot.red{background:var(--red)}
+.pwin-cell{display:flex;align-items:center;gap:8px}
+.pwin-bar-bg{flex:1;height:6px;background:#e5e5ea;border-radius:3px;overflow:hidden;min-width:40px}
+.pwin-bar{height:100%;border-radius:3px;background:var(--accent-gradient);transition:width .4s}
+.pwin-pct{font-weight:700;font-size:12px;min-width:32px}
+.ai-sparkle{display:inline;opacity:.5;margin-right:2px}
+.intel-text{font-size:12px;line-height:1.4;max-width:220px}
+.intel-text em{font-style:normal;background:linear-gradient(135deg,rgba(0,113,227,.1),rgba(94,92,230,.08));padding:1px 3px;border-radius:3px;font-weight:600}
+.action-tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.action-tag.urgent{background:#ffebee;color:#c62828}.action-tag.engage{background:#e8f5e9;color:#2e7d32}.action-tag.escalate{background:#fff8e1;color:#f57f17}.action-tag.capture{background:#ede7f6;color:#4527a0}.action-tag.leverage{background:#e3f2fd;color:#0d47a1}.action-tag.develop{background:#fff3e0;color:#e65100}
+
+/* EXPANDED DETAIL */
+.detail-row{display:none}
+.detail-row.show{display:table-row}
+.detail-cell{padding:0 12px 16px !important;background:#fafbff}
+.detail-inner{border:1px solid #e8eaf0;border-radius:10px;padding:16px;background:#fff}
+/* Edit 3: Vision callout banner */
+.vision-banner{background:rgba(0,113,227,.04);border:1px solid rgba(0,113,227,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#4a6a8a;display:flex;align-items:flex-start;gap:8px;position:relative}
+.vision-banner svg{flex-shrink:0;width:16px;height:16px;color:var(--glean-blue);margin-top:1px}
+.proposed-badge{position:absolute;top:8px;right:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--glean-blue);background:rgba(0,113,227,.1);padding:2px 7px;border-radius:4px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.detail-section-title{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dark-sec);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.timeline-item{display:flex;gap:8px;padding:5px 0;font-size:12px;border-left:2px solid #e5e5ea;padding-left:10px;margin-left:4px}
+.timeline-date{color:var(--text-dark-sec);min-width:50px;font-size:11px}
+.timeline-text{color:var(--text-dark)}
+.ai-badge-sm{background:var(--accent-gradient);color:#fff;font-size:9px;padding:1px 5px;border-radius:4px;font-weight:600;flex-shrink:0}
+/* Edit 9: Cited Sources — only show green dot cited items */
+.source-item{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px}
+.source-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.source-dot.incl{background:var(--green)}
+.source-system{color:var(--text-dark-sec);font-size:11px}
+/* Edit 4: Pattern cards — no scope tags, no confidence bars */
+.pattern-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:14px}
+.pattern-card{border:1px solid #e8eaf0;border-radius:8px;padding:12px;background:#fafbff}
+.pattern-type{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dark-sec);margin-bottom:6px}
+.pattern-body{font-size:12px;line-height:1.45;color:var(--text-dark);margin-bottom:6px}
+.pattern-body strong{font-weight:700}
+.pattern-basis{font-size:11px;color:var(--text-dark-sec)}
+.insights-disclaimer{font-size:11px;color:var(--text-dark-sec);margin-bottom:10px;font-style:italic}
+/* Edit 2: Sources summary replaces guidance box */
+.sources-summary{border-radius:8px;padding:12px 14px;display:flex;gap:10px;margin-bottom:12px;font-size:12px;line-height:1.45;background:#f0f4ff;border:1px solid #dce4f0;color:var(--text-dark)}
+.sources-summary svg{flex-shrink:0;width:18px;height:18px;opacity:.5;margin-top:1px}
+.crm-btn{background:var(--accent-gradient);color:#fff;padding:8px 20px;border-radius:8px;font-size:12px;font-weight:600;margin-top:4px;transition:opacity .15s}
+.crm-btn:hover{opacity:.85}
+
+/* VIEW 2 - CUSTOMER & MARKET INTEL */
+.exec-kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:20px 24px 16px}
+.exec-kpi{background:var(--navy-card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px 20px}
+.exec-kpi-label{font-size:11px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.exec-kpi-value{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.exec-kpi-sub{font-size:11.5px;color:var(--text-sec);margin-top:6px}
+.exec-kpi-sub .up{color:var(--green)}.exec-kpi-sub .down{color:var(--red)}
+.sparkline{display:inline-flex;align-items:flex-end;gap:2px;margin-left:8px;vertical-align:middle}
+.sparkline .sp{width:4px;border-radius:1px;background:rgba(0,113,227,.5)}
+
+.section{padding:0 24px 20px}
+.section-title{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title .ai-sparkle-lg{width:16px;height:16px;opacity:.6}
+
+/* BU CARDS */
+.bu-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bu-card{background:var(--navy-card);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;padding:16px 18px}
+.bu-health-bar{height:3px;margin:-16px -18px 14px;border-radius:12px 12px 0 0}
+.bu-health-bar.good{background:var(--green)}.bu-health-bar.warn{background:var(--amber)}.bu-health-bar.bad{background:var(--red)}
+.bu-card-name{font-size:14px;font-weight:700;margin-bottom:8px}
+.bu-stat-row{display:flex;gap:16px;margin-bottom:6px;font-size:12px;color:var(--text-sec)}
+.bu-stat-row span{color:var(--text);font-weight:600}
+.bu-pattern{font-size:11.5px;color:var(--text-sec);line-height:1.4;margin-top:8px;padding:8px 10px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid rgba(0,113,227,.4)}
+.bu-pattern em{font-style:normal;color:var(--text);font-weight:500}
+
+/* BAR CHART */
+.bar-chart{margin-bottom:16px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-label{width:260px;font-size:12px;text-align:right;color:var(--text-sec);flex-shrink:0}
+.bar-track{flex:1;height:22px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--accent-gradient);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:700;color:#fff;transition:width .6s ease}
+.insight-box{background:rgba(0,113,227,.06);border:1px solid rgba(0,113,227,.12);border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.5;color:var(--text);display:flex;gap:10px}
+.insight-box svg{flex-shrink:0;width:18px;height:18px;opacity:.6;margin-top:1px}
+
+/* AT RISK CARDS */
+.risk-cards{display:flex;flex-direction:column;gap:12px}
+.risk-card{background:var(--navy-card);border:1px solid rgba(255,69,58,.15);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:12px}
+.risk-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.risk-name{font-size:14px;font-weight:700}
+.risk-value{font-size:13px;font-weight:600;color:var(--text)}
+.risk-summary{font-size:12px;color:var(--text-sec);line-height:1.45;margin-bottom:8px}
+.risk-action{font-size:12px;padding:8px 12px;background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.15);border-radius:8px;line-height:1.4}
+.risk-action strong{color:var(--red)}
+.risk-meta{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:8px;min-width:120px}
+.risk-pwin{font-size:12px;color:var(--text-sec)}
+.risk-days{font-size:22px;font-weight:700;color:var(--amber);line-height:1}
+.risk-days-label{font-size:10px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.05em}
+
+/* FUNNEL */
+.funnel{display:flex;gap:4px;margin-bottom:8px}
+.funnel-stage{flex:1;background:var(--navy-card);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px;text-align:center;position:relative}
+.funnel-stage::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:6px solid rgba(255,255,255,.08);z-index:1}
+.funnel-stage:last-child::after{display:none}
+.funnel-count{font-size:22px;font-weight:700;line-height:1}
+.funnel-label{font-size:10px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.funnel-value{font-size:12px;color:var(--text-sec);margin-top:4px}
+
+/* CONFIDENCE DIST */
+.conf-dist{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.conf-block{background:var(--navy-card);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px;text-align:center}
+.conf-block-count{font-size:28px;font-weight:700;line-height:1}
+.conf-block-count.cgreen{color:var(--green)}.conf-block-count.camber{color:var(--amber)}.conf-block-count.cred{color:var(--red)}.conf-block-count.cpurple{color:var(--glean-purple)}
+.conf-block-label{font-size:11px;color:var(--text-sec);margin-top:4px}
+.conf-note{font-size:12px;color:var(--text-sec);line-height:1.45;padding:10px 14px;background:rgba(255,255,255,.03);border-radius:8px;border-left:3px solid var(--red)}
+
+/* VIEW 3 - MARKET OPPORTUNITIES */
+.mkt-kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 24px 16px}
+.mkt-kpi{background:var(--navy-card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px 20px}
+.mkt-kpi-label{font-size:11px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.mkt-kpi-value{font-size:32px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.mkt-kpi-sub{font-size:11.5px;color:var(--text-sec);margin-top:6px}
+.mkt-kpi-sub .up{color:var(--green)}.mkt-kpi-sub .down{color:var(--red)}
+
+.mkt-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card-light);border-radius:10px;overflow:hidden;color:var(--text-dark)}
+.mkt-table th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:10px 12px;text-align:left;font-weight:600;color:var(--text-dark-sec);border-bottom:1px solid var(--card-border);background:#f9f9fb}
+.mkt-table th.ai-col{background:linear-gradient(180deg,rgba(0,113,227,.06),rgba(94,92,230,.04));position:relative}
+.mkt-table th.ai-col::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-gradient)}
+.mkt-table td{padding:10px 12px;border-bottom:1px solid #f0f0f2;font-size:12.5px;vertical-align:middle}
+.mkt-table tr:hover{background:#f5f7ff}
+
+.pipeline-bar-bg{width:100%;height:8px;background:#e5e5ea;border-radius:4px;overflow:hidden;margin-top:4px}
+.pipeline-bar{height:100%;border-radius:4px;transition:width .4s}
+.pipeline-bar.green{background:var(--green)}.pipeline-bar.amber{background:var(--amber)}.pipeline-bar.red{background:var(--red)}
+.pipeline-label{font-size:11px;color:var(--text-dark-sec);margin-top:2px}
+
+.assess-tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:500}
+.assess-tag.core{background:#e8f5e9;color:#2e7d32}
+.assess-tag.growth{background:#e3f2fd;color:#1565c0}
+.assess-tag.underweight{background:#fff3e0;color:#e65100}
+.assess-tag.watch{background:#f5f5f5;color:#6e6e73}
+
+.insight-highlight{background:linear-gradient(135deg,rgba(0,113,227,.04),rgba(94,92,230,.04));border:1px solid rgba(0,113,227,.15);border-radius:12px;padding:20px 24px;margin:0 24px 24px;display:flex;gap:14px;align-items:flex-start}
+.insight-highlight .ih-icon{width:36px;height:36px;border-radius:10px;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.insight-highlight .ih-icon svg{width:18px;height:18px;color:#fff}
+.insight-highlight .ih-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.insight-highlight .ih-body{font-size:12.5px;line-height:1.5;color:var(--text-dark-sec)}
+.insight-highlight .ih-body strong{color:var(--text-dark);font-weight:700}
+
+.mkt-segment-name{font-weight:600;font-size:13px}
+.mkt-segment-sub{font-size:11px;color:var(--text-dark-sec);margin-top:1px}
+.bu-dots{display:flex;gap:4px;margin-top:4px}
+.bu-dot{width:8px;height:8px;border-radius:50%}
+.bu-dot.raytheon{background:var(--raytheon)}.bu-dot.collins{background:var(--collins)}.bu-dot.pw{background:var(--pw)}
+
+@media(max-width:1400px){.mkt-kpi-strip{grid-template-columns:repeat(2,1fr)}}
+
+/* CHAT */
+.chat-fab{position:fixed;bottom:24px;right:24px;width:50px;height:50px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:200;box-shadow:0 4px 20px rgba(0,113,227,.35);transition:transform .2s}
+.chat-fab:hover{transform:scale(1.06)}
+.chat-fab svg{width:24px;height:24px;color:#fff}
+.chat-panel{position:fixed;bottom:24px;right:24px;width:380px;height:520px;background:var(--navy);border:1px solid rgba(255,255,255,.1);border-radius:16px;z-index:200;display:none;flex-direction:column;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,.5);animation:chatIn .25s ease}
+.chat-panel.open{display:flex}
+@keyframes chatIn{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+.chat-header{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.chat-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+.chat-scope{font-size:10px;color:var(--text-sec);margin-top:2px}
+.chat-close{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.chat-close:hover{background:rgba(255,255,255,.08)}
+.chat-messages{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.chat-msg{max-width:90%;padding:10px 14px;border-radius:12px;font-size:12.5px;line-height:1.5}
+.chat-msg.ai{background:var(--navy-mid);align-self:flex-start;border-bottom-left-radius:4px}
+.chat-msg.user{background:var(--glean-blue);align-self:flex-end;border-bottom-right-radius:4px}
+.chat-input-wrap{padding:10px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px}
+.chat-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:8px 12px;color:var(--text);font-size:12.5px;outline:none}
+.chat-input::placeholder{color:var(--text-sec)}
+.chat-send{width:34px;height:34px;border-radius:50%;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s}
+.chat-send:hover{opacity:.85}
+.chat-send svg{width:16px;height:16px;color:#fff}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:none;align-items:center;justify-content:center;animation:fadeIn .2s}
+.modal-overlay.open{display:flex}
+.modal{background:var(--navy-light);border:1px solid rgba(255,255,255,.08);border-radius:16px;width:640px;max-height:80vh;overflow-y:auto;padding:24px}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.modal-section{margin-bottom:14px}
+.modal-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-sec);margin-bottom:8px}
+.modal-source{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px}
+.modal-source .dot{width:7px;height:7px}
+.modal-footer{font-size:11px;color:var(--text-sec);line-height:1.5;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.modal-close:hover{background:rgba(255,255,255,.08)}
+
+/* RESPONSIVE */
+@media(max-width:1400px){.kpi-strip,.exec-kpi-strip{grid-template-columns:repeat(3,1fr)}.mkt-kpi-strip{grid-template-columns:repeat(2,1fr)}.bu-cards{grid-template-columns:1fr 1fr}.conf-dist{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.kpi-strip,.exec-kpi-strip{grid-template-columns:repeat(2,1fr)}.mkt-kpi-strip{grid-template-columns:1fr}.bu-cards{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.funnel{flex-wrap:wrap}.funnel-stage{min-width:calc(33% - 4px)}}
+</style>
+</head>
+<body>
+<svg style="position:absolute;width:0;height:0"><defs><linearGradient id="pg" x1="0" y1="0" x2="18" y2="18" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#0071e3"/><stop offset="100%" stop-color="#5e5ce6"/></linearGradient></defs></svg>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div style="height:var(--topbar-h);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect width="20" height="20" rx="4" fill="rgba(255,255,255,.08)"/><path d="M10 4l5 3v6l-5 3-5-3V7l5-3z" stroke="rgba(255,255,255,.3)" stroke-width="1.2" fill="none"/></svg>
+  </div>
+  <div class="sidebar-item active" data-view="capture" data-tooltip="Capture Lead" onclick="switchView('capture')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/></svg>
+    <span class="sidebar-label">Capture Lead</span>
+  </div>
+  <div class="sidebar-item" data-view="intel" data-tooltip="Customer & Market Intel" onclick="switchView('intel')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/><ellipse cx="12" cy="12" rx="4" ry="9"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+    <span class="sidebar-label">Market Intelligence</span>
+  </div>
+  <div class="sidebar-item" data-view="markets" data-tooltip="Market Opportunities" onclick="switchView('markets')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span class="sidebar-label">Market Opportunities</span>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-item" data-tooltip="Settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span class="sidebar-label">Settings</span>
+  </div>
+  <div class="sidebar-item" data-tooltip="Connected Sources" onclick="openModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <span class="sidebar-label">Connected Sources</span>
+  </div>
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-toggle" onclick="toggleSidebar()">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 4 10 8 6 12"/></svg>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-left">
+    <div class="rtx-logo">RTX</div>
+    <div class="topbar-divider"></div>
+    <span class="powered-by">(powered by Glean)</span>
+    <span class="view-label" id="viewLabel">Strategic Pursuits — Capture Lead</span>
+  </div>
+  <div class="topbar-right">
+    <button class="scope-btn" onclick="openModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Connected Sources
+    </button>
+    <div class="refresh-tag"><div class="refresh-dot"></div>Refreshed 6 min ago</div>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input type="text" class="topbar-search" id="searchInput" placeholder="Search pursuits..." oninput="filterTable()">
+    </div>
+    <div class="avatar" id="userAvatar">RS</div>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- VIEW 1: CAPTURE LEAD -->
+<div class="view active" id="view-capture">
+  <!-- Edit 7: Context banner -->
+  <div class="context-banner" id="banner1">
+    <div class="context-banner-text">This prototype uses synthetic data to demonstrate Glean Prism capabilities for RTX Strategic Pursuits. Data shown does not represent actual RTX programs or intelligence. Elements marked "PROPOSED" represent governance enhancements designed for co-development with RTX.</div>
+    <div class="dismiss" onclick="this.parentElement.style.display='none'"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg></div>
+  </div>
+  <div class="kpi-strip">
+    <div class="kpi-card"><div class="kpi-label">Active Pursuits</div><div class="kpi-value">47</div><div class="kpi-sub">Across 3 BUs</div></div>
+    <div class="kpi-card"><div class="kpi-label">Pipeline Value</div><div class="kpi-value">$14.2B</div><div class="kpi-sub green">+$1.8B vs. prior quarter</div></div>
+    <div class="kpi-card"><div class="kpi-label">Win Rate (TTM)</div><div class="kpi-value">38%</div><div class="kpi-sub green">+4pp vs. FY25</div></div>
+    <div class="kpi-card"><div class="kpi-label">At-Risk Pursuits</div><div class="kpi-value red">6</div><div class="kpi-sub red">Require immediate action</div></div>
+    <div class="kpi-card"><div class="kpi-label">Avg Cycle Time</div><div class="kpi-value">142d</div><div class="kpi-sub green">-18d vs. FY25</div></div>
+    <div class="kpi-card"><div class="kpi-label">AI-Assisted Analyses</div><div class="kpi-value">1,247</div><div class="kpi-sub">Generated this quarter</div></div>
+  </div>
+
+  <div class="tabs-bar">
+    <button class="tab-pill active" onclick="setTab(this,'all')">All Pursuits</button>
+    <button class="tab-pill" onclick="setTab(this,'atrisk')">At Risk</button>
+    <button class="tab-pill" onclick="setTab(this,'capture')">Capture Phase</button>
+    <button class="tab-pill" onclick="setTab(this,'proposal')">Proposal Phase</button>
+    <button class="tab-pill" onclick="setTab(this,'winloss')">Win/Loss Analysis</button>
+    <div class="filter-spacer"></div>
+    <button class="bu-filter" id="buFilter" onclick="cycleBU()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3h10M3 6h6M5 9h2"/></svg>
+      <span id="buLabel">All BUs</span>
+    </button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="prism-table">
+      <thead>
+        <tr>
+          <th style="width:200px">Pursuit Name</th>
+          <th>Business Unit</th>
+          <th>Stage</th>
+          <th>Est. Value</th>
+          <th class="ai-col">Pursuit Health</th>
+          <th class="ai-col">PWIN Score</th>
+          <th class="ai-col" style="min-width:200px">Key Intelligence</th>
+          <th class="ai-col">Recommended Action</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- VIEW 2: CUSTOMER & MARKET INTELLIGENCE -->
+<div class="view" id="view-intel">
+  <!-- Edit 7: Context banner -->
+  <div class="context-banner" id="banner2">
+    <div class="context-banner-text">This prototype uses synthetic data to demonstrate Glean Prism capabilities for RTX Strategic Pursuits. Data shown does not represent actual RTX programs or intelligence. Elements marked "PROPOSED" represent governance enhancements designed for co-development with RTX.</div>
+    <div class="dismiss" onclick="this.parentElement.style.display='none'"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg></div>
+  </div>
+  <div class="exec-kpi-strip">
+    <div class="exec-kpi"><div class="exec-kpi-label">Total Pipeline</div><div class="exec-kpi-value">$14.2B<span class="sparkline"><span class="sp" style="height:8px"></span><span class="sp" style="height:12px"></span><span class="sp" style="height:10px"></span><span class="sp" style="height:16px"></span><span class="sp" style="height:14px"></span><span class="sp" style="height:20px"></span></span></div><div class="exec-kpi-sub">Quarterly trend</div></div>
+    <div class="exec-kpi"><div class="exec-kpi-label">Weighted Pipeline</div><div class="exec-kpi-value">$5.8B</div><div class="exec-kpi-sub">Risk-adjusted by PWIN</div></div>
+    <div class="exec-kpi"><div class="exec-kpi-label">Enterprise Win Rate</div><div class="exec-kpi-value">38% <span style="font-size:14px;color:var(--green)">&#9650; +4pp</span></div><div class="exec-kpi-sub">Trailing 12 months</div></div>
+    <div class="exec-kpi"><div class="exec-kpi-label">Pursuits at Risk</div><div class="exec-kpi-value" style="color:var(--red)">6<span style="font-size:16px;color:var(--text-sec);font-weight:400"> / 47</span></div><div class="exec-kpi-sub">Require executive action</div></div>
+    <div class="exec-kpi"><div class="exec-kpi-label">Avg PWIN Score</div><div class="exec-kpi-value">54%</div><div class="exec-kpi-sub">Across 47 active pursuits</div></div>
+    <!-- Edit 6: Reframed metric -->
+    <div class="exec-kpi"><div class="exec-kpi-label">AI-Assisted Analyses</div><div class="exec-kpi-value">1,247</div><div class="exec-kpi-sub">Generated this quarter across all pursuits</div></div>
+  </div>
+
+  <!-- PORTFOLIO HEALTH -->
+  <div class="section">
+    <div class="section-title"><svg class="ai-sparkle-lg" viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="url(#pg)" opacity=".7"/></svg> Portfolio Health by Business Unit</div>
+    <div class="bu-cards">
+      <div class="bu-card"><div class="bu-health-bar good"></div>
+        <div class="bu-card-name" style="color:var(--raytheon)">Raytheon</div>
+        <div class="bu-stat-row">Active: <span>28 pursuits</span> &nbsp;|&nbsp; Pipeline: <span>$8.6B</span></div>
+        <div class="bu-stat-row">Win Rate: <span style="color:var(--green)">41% (+6pp vs FY25)</span> &nbsp;|&nbsp; At Risk: <span>3</span></div>
+        <div class="bu-pattern"><em>Schedule confidence</em> is the #1 discriminator in Navy pursuits based on historical win/loss data</div>
+      </div>
+      <div class="bu-card"><div class="bu-health-bar good"></div>
+        <div class="bu-card-name" style="color:var(--collins)">Collins Aerospace</div>
+        <div class="bu-stat-row">Active: <span>11 pursuits</span> &nbsp;|&nbsp; Pipeline: <span>$3.1B</span></div>
+        <div class="bu-stat-row">Win Rate: <span style="color:var(--green)">44% (+2pp vs FY25)</span> &nbsp;|&nbsp; At Risk: <span>1</span></div>
+        <div class="bu-pattern">Historical data suggests sole-source pursuits convert reliably but take <em>8-12% BAFO haircut</em></div>
+      </div>
+      <div class="bu-card"><div class="bu-health-bar bad"></div>
+        <div class="bu-card-name" style="color:var(--pw)">Pratt & Whitney</div>
+        <div class="bu-stat-row">Active: <span>8 pursuits</span> &nbsp;|&nbsp; Pipeline: <span>$2.5B</span></div>
+        <div class="bu-stat-row">Win Rate: <span style="color:var(--red)">28% (-3pp vs FY25)</span> &nbsp;|&nbsp; At Risk: <span>2</span></div>
+        <div class="bu-pattern">Historical pursuit data suggests <em>price is the primary decision factor in MRO outcomes.</em> Public reporting indicates competitor facility openings correlate with shifted decisions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIN/LOSS FACTORS -->
+  <div class="section">
+    <div class="section-title"><svg class="ai-sparkle-lg" viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="url(#pg)" opacity=".7"/></svg> Win/Loss Factor Analysis</div>
+    <div class="bar-chart">
+      <div class="bar-row"><div class="bar-label">Schedule Confidence / Past Performance</div><div class="bar-track"><div class="bar-fill" style="width:39%">39%</div></div></div>
+      <div class="bar-row"><div class="bar-label">Price Competitiveness</div><div class="bar-track"><div class="bar-fill" style="width:31%">31%</div></div></div>
+      <div class="bar-row"><div class="bar-label">Late Cross-BU Coordination</div><div class="bar-track"><div class="bar-fill" style="width:22%">22%</div></div></div>
+      <div class="bar-row"><div class="bar-label">Offset / Industrial Participation</div><div class="bar-track"><div class="bar-fill" style="width:18%">18%</div></div></div>
+      <div class="bar-row"><div class="bar-label">Technical Compliance</div><div class="bar-track"><div class="bar-fill" style="width:8%">8%</div></div></div>
+    </div>
+    <div class="insight-box">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="url(#pg)"/></svg>
+      <div>The <strong>#1 controllable loss factor</strong> is cross-BU coordination (22%). In proposals requiring cross-BU inputs, engaging the contributing BU's VP-level sponsor before RFP drop eliminated late deliveries in all observed cases. <strong>Recommend a standing cross-BU proposal governance process.</strong></div>
+    </div>
+  </div>
+
+  <!-- AT-RISK EXECUTIVE -->
+  <div class="section">
+    <div class="section-title"><svg class="ai-sparkle-lg" viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="url(#pg)" opacity=".7"/></svg> At-Risk Pursuits — Executive Action Required</div>
+    <div class="risk-cards">
+      <div class="risk-card">
+        <div>
+          <div class="risk-header"><span class="risk-name">GTF Sustainment — APAC</span><span class="bu-badge pw">P&W</span><span class="risk-value">$1.7B</span></div>
+          <div class="risk-summary">Recent support ticket volume and customer communications suggest increasing delivery concerns. Public reporting indicates competitor offering lower rates with new regional facility. Historical RTX pursuit data shows executive engagement within 14 days as the primary recovery mechanism.</div>
+          <div class="risk-action"><strong>Action:</strong> Schedule CEO-to-CEO call within 7 days. Prepare contractual delivery guarantee with penalties.</div>
+        </div>
+        <div class="risk-meta">
+          <div class="risk-pwin">PWIN: 35%</div>
+          <div class="risk-days">34</div><div class="risk-days-label">Days to Decision</div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div>
+          <div class="risk-header"><span class="risk-name">Next-Gen CCA Sensor Suite</span><span class="bu-badge raytheon">Raytheon</span><span class="risk-value">$890M</span></div>
+          <div class="risk-summary">Proposal in progress. Cross-BU cost inputs pending from Collins avionics team. Historical RTX pursuit data shows late cross-BU inputs as a leading cause of proposal delays.</div>
+          <div class="risk-action"><strong>Action:</strong> Escalate to Collins VP Engineering. Invoke cross-BU proposal governance.</div>
+        </div>
+        <div class="risk-meta">
+          <div class="risk-pwin">PWIN: 48%</div>
+          <div class="risk-days">22</div><div class="risk-days-label">Days to Decision</div>
+        </div>
+      </div>
+      <div class="risk-card">
+        <div>
+          <div class="risk-header"><span class="risk-name">F135 Overhaul — Saudi Arabia</span><span class="bu-badge pw">P&W</span><span class="risk-value">$560M</span></div>
+          <div class="risk-summary">FMS case approved per public DSCA notification. Internal records indicate offset requirements have increased since initial approval. No local partner LOI in place. Historical pursuit data shows pre-negotiated LOIs significantly reduce response timelines.</div>
+          <div class="risk-action"><strong>Action:</strong> Authorize SAMI partnership negotiation. Engage FMS program office for offset structure guidance.</div>
+        </div>
+        <div class="risk-meta">
+          <div class="risk-pwin">PWIN: 52%</div>
+          <div class="risk-days">30</div><div class="risk-days-label">Days to Decision</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:10px;font-size:12px;color:var(--text-sec);opacity:.6">3 additional at-risk pursuits below the fold &#8595;</div>
+  </div>
+
+  <!-- PIPELINE FUNNEL -->
+  <div class="section">
+    <div class="section-title">Pipeline Stage Distribution</div>
+    <div class="funnel">
+      <div class="funnel-stage"><div class="funnel-count">22</div><div class="funnel-label">Capture</div><div class="funnel-value">$7.2B</div></div>
+      <div class="funnel-stage"><div class="funnel-count">12</div><div class="funnel-label">Proposal</div><div class="funnel-value">$3.8B</div></div>
+      <div class="funnel-stage"><div class="funnel-count">6</div><div class="funnel-label">Evaluation</div><div class="funnel-value">$2.1B</div></div>
+      <div class="funnel-stage"><div class="funnel-count">4</div><div class="funnel-label">Awarded</div><div class="funnel-value">$5.4B</div></div>
+      <div class="funnel-stage"><div class="funnel-count">3</div><div class="funnel-label">Debrief</div><div class="funnel-value">$1.1B</div></div>
+    </div>
+  </div>
+
+  <!-- CONFIDENCE DISTRIBUTION -->
+  <div class="section">
+    <div class="section-title">Confidence Distribution</div>
+    <div class="conf-dist">
+      <div class="conf-block"><div class="conf-block-count cgreen">8</div><div class="conf-block-label">90%+ (High)</div></div>
+      <div class="conf-block"><div class="conf-block-count camber">21</div><div class="conf-block-label">70–89% (Adequate)</div></div>
+      <div class="conf-block"><div class="conf-block-count cred">12</div><div class="conf-block-label">Below 70% (Low)</div></div>
+      <div class="conf-block"><div class="conf-block-count cpurple">6</div><div class="conf-block-label">In Review (Held)</div></div>
+    </div>
+    <div class="conf-note">12 pursuits have confidence scores below 70%, meaning the AI is working with less than 70% of known relevant documents. These pursuits span classification boundaries and require supplemental classified-environment review for go/no-go decisions.</div>
+  </div>
+</div>
+
+<!-- VIEW 3: MARKET OPPORTUNITIES -->
+<div class="view" id="view-markets">
+  <div class="context-banner" id="banner3">
+    <div class="context-banner-text">This prototype uses synthetic data to demonstrate Glean Prism capabilities for RTX Strategic Pursuits. Data shown does not represent actual RTX programs or intelligence. Elements marked "PROPOSED" represent governance enhancements designed for co-development with RTX.</div>
+    <div class="dismiss" onclick="this.parentElement.style.display='none'"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg></div>
+  </div>
+
+  <div class="mkt-kpi-strip">
+    <div class="mkt-kpi"><div class="mkt-kpi-label">Addressable Market (5yr)</div><div class="mkt-kpi-value">$62B</div><div class="mkt-kpi-sub">Across 6 tracked segments</div></div>
+    <div class="mkt-kpi"><div class="mkt-kpi-label">RTX Coverage</div><div class="mkt-kpi-value">41%</div><div class="mkt-kpi-sub"><span class="up">+3pp vs FY25</span></div></div>
+    <div class="mkt-kpi"><div class="mkt-kpi-label">Identified Gaps</div><div class="mkt-kpi-value" style="color:var(--amber)">4</div><div class="mkt-kpi-sub">Segments below target coverage</div></div>
+    <div class="mkt-kpi"><div class="mkt-kpi-label">Emerging Opportunities</div><div class="mkt-kpi-value" style="color:var(--glean-blue)">8</div><div class="mkt-kpi-sub">Flagged by AI from public sources</div></div>
+  </div>
+
+  <div class="tabs-bar">
+    <button class="tab-pill active" onclick="setMktTab(this,'all')">All Segments</button>
+    <button class="tab-pill" onclick="setMktTab(this,'underweight')">Underweight</button>
+    <button class="tab-pill" onclick="setMktTab(this,'growth')">Strategic Growth</button>
+    <button class="tab-pill" onclick="setMktTab(this,'core')">Core</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="mkt-table">
+      <thead>
+        <tr>
+          <th style="width:180px">Market Segment</th>
+          <th>5yr TAM</th>
+          <th>RTX Share</th>
+          <th>Pipeline Coverage</th>
+          <th class="ai-col">Strategic Assessment</th>
+          <th class="ai-col">Top Competitor</th>
+          <th class="ai-col" style="min-width:200px">Key Insight</th>
+          <th>BU Exposure</th>
+        </tr>
+      </thead>
+      <tbody id="mktTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="insight-highlight">
+    <div class="ih-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#fff"/></svg></div>
+    <div>
+      <div class="ih-title" style="color:var(--text-dark)">Biggest Coverage Gap: Space-Based ISR & Sensors</div>
+      <div class="ih-body">RTX holds an estimated <strong>8% share</strong> in a segment projected to grow at <strong>14% CAGR</strong> through 2030. Public procurement data shows $4.2B in upcoming opportunities across LEO constellations and space-resilient architecture programs. Historical RTX pursuit data shows <strong>Raytheon sensor heritage could transfer</strong>, but no active pursuits exist in this segment today. <strong>Recommend cross-BU space strategy working group.</strong></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- SCOPE MODAL — Edit 1: Reframed as Connected Sources -->
+<div class="modal-overlay" id="scopeModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeModal()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg></button>
+    <div class="modal-title"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Connected Sources</div>
+    <div class="modal-section">
+      <div class="modal-section-title">Active Connectors (permissions inherited from source systems)</div>
+      <div class="modal-source"><div class="dot source-dot incl"></div><strong>SharePoint:</strong>&nbsp;Unclassified Pursuits Library, BD Shared Drive, Proposals Archive</div>
+      <div class="modal-source"><div class="dot source-dot incl"></div><strong>CRM (Dynamics 365):</strong>&nbsp;Accounts, Opportunities, Pipeline, Contact History</div>
+      <div class="modal-source"><div class="dot source-dot incl"></div><strong>Microsoft Teams:</strong>&nbsp;Capture team channels, BD coordination channels</div>
+      <div class="modal-source"><div class="dot source-dot incl"></div><strong>Public OSINT:</strong>&nbsp;DSCA notifications, Janes Defence, SAM.gov, Congressional records</div>
+      <div class="modal-source"><div class="dot source-dot incl"></div><strong>Email (Exchange):</strong>&nbsp;Customer correspondence (unclassified/CUI only)</div>
+      <div class="modal-source"><div class="dot source-dot incl"></div><strong>Win/Loss Database:</strong>&nbsp;Historical debrief repository, lessons learned archive</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Not Connected to This Prism</div>
+      <div class="modal-source" style="opacity:.55"><div class="dot source-dot excl"></div><strong>GCC High:</strong>&nbsp;All classified repositories and ITAR-controlled libraries</div>
+      <div class="modal-source" style="opacity:.55"><div class="dot source-dot excl"></div><strong>SharePoint:</strong>&nbsp;IAMD-Classified, SAP-controlled program folders, NOFORN libraries</div>
+      <div class="modal-source" style="opacity:.55"><div class="dot source-dot excl"></div><strong>SCIFNet:</strong>&nbsp;All SCI-level materials and communications</div>
+      <div class="modal-source" style="opacity:.55"><div class="dot source-dot excl"></div><strong>Contractor proprietary:</strong>&nbsp;Third-party technical data with distribution restrictions</div>
+    </div>
+    <div class="modal-footer">Source permissions inherited from RTX Active Directory and SharePoint access controls. Connector configuration managed by RTX IT Admin. Last sync: Mar 25, 2026, 11:42 PM ET.</div>
+  </div>
+</div>
+
+<!-- CHAT FAB + PANEL -->
+<div class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</div>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div>
+      <div class="chat-title"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="url(#pg)"/></svg> Ask Prism</div>
+      <!-- Edit 8: Updated scope tag -->
+      <div class="chat-scope">Chatting across 47 pursuits · 6 connected sources</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg></button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <!-- Edit 8: Updated first message -->
+    <div class="chat-msg ai">I have context on 47 active pursuits across Raytheon, Collins, and P&W based on connected source systems. All data is unclassified. What would you like to know?</div>
+  </div>
+  <div class="chat-input-wrap">
+    <input class="chat-input" id="chatInput" placeholder="Ask about pursuits, patterns, risks..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-send" onclick="sendChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const pursuits = [
+  {
+    id:'phantom', name:'Phantom Strike Radar Upgrade', bu:'Raytheon', buClass:'raytheon',
+    stage:'Capture', stageClass:'capture', value:'$2.4B', health:'Strong', healthColor:'green', pwin:72,
+    // Edit 5: Softened intel language
+    intel:'Based on public contract records and CRM data, RTX has an <em>established presence across multiple target nations</em> in this pursuit class',
+    action:'Leverage recent allied reference wins', actionClass:'leverage',
+    crossDomain:false,
+    timeline:[
+      {date:'Mar 12',text:'Jordan RFI requirements revised'},
+      {date:'Mar 5',text:'Bulgaria contract signed — reference win'},
+      {date:'Feb 28',text:'Competitor filed unsolicited proposal (Taiwan)'},
+      {date:'Feb 14',text:'PWIN updated 65% → 72% after Bulgaria award'}
+    ],
+    // Edit 9: Only cited sources (removed excluded)
+    sources:[
+      {name:'SharePoint Pursuits Library',sys:'SharePoint'},
+      {name:'CRM Opportunity Record',sys:'Dynamics 365'},
+      {name:'Win/Loss DB — 3 radar debriefs',sys:'Win/Loss DB'},
+      {name:'Janes Defence F-16 Fleet Status',sys:'OSINT'}
+    ],
+    // Edit 4: Removed scope tags and confidence bars from patterns
+    patterns:[
+      {type:'Competitive Win/Loss',body:'Historical RTX pursuit data shows that in <strong>7 radar upgrade pursuits</strong> (allied nation, fighter platform, $1B+), RTX won 5. Wins correlated with installed base leverage and lifecycle cost framing. 2 losses driven by price undercutting 14-19%.',basis:'7 pursuits'},
+      {type:'Customer Decision Factors',body:'Public procurement records show customer evaluated 4 RTX proposals in 6 years. Factors: (1) Interoperability, (2) Offset, (3) Schedule, (4) Price. <strong>Tech alone not primary differentiator.</strong>',basis:'4 interactions'},
+      {type:'Timing Pattern',body:'Historical RTX pursuit data shows procurement authority extends timelines <strong>30-45 days</strong> in 3 of 4 past interactions. Q4 submissions show 28% lower conversion.',basis:'4 cycles'}
+    ],
+    // Edit 2: Simplified sources summary
+    sourcesSummary:'This analysis cites 4 documents across 4 systems. All sources are unclassified. View full citations above.'
+  },
+  {
+    id:'cca', name:'Next-Gen CCA Sensor Suite', bu:'Raytheon', buClass:'raytheon',
+    stage:'Proposal', stageClass:'proposal', value:'$890M', health:'Monitor', healthColor:'yellow', pwin:48,
+    intel:'<em>Proposal in progress.</em> Cross-BU cost inputs pending from Collins avionics team.',
+    action:'Escalate Collins cost inputs', actionClass:'escalate',
+    crossDomain:false,
+    timeline:[
+      {date:'Mar 20',text:'USAF extended deadline 14 days'},
+      {date:'Mar 15',text:'Collins cost volume still pending — 3rd request'},
+      {date:'Mar 8',text:'Technical volume peer review completed'}
+    ],
+    sources:[
+      {name:'SharePoint CCA Proposal v4.2',sys:'SharePoint'},
+      {name:'Teams CCA Channel — 34 messages',sys:'Teams'},
+      {name:'CRM Opportunity Record',sys:'Dynamics 365'}
+    ],
+    patterns:[
+      {type:'Cross-BU Coordination Risk',body:'Historical RTX pursuit data shows late cost volumes = <strong>#1 schedule risk</strong> in multi-BU proposals. VP sponsor engagement pre-RFP correlated with zero late deliveries.',basis:'8 proposals'},
+      {type:'Competitive Positioning',body:'Historical RTX pursuit data shows competitor won 2 of 3 on platform relationship with prime. RTX won 1 with <strong>20% weight/SWaP advantage</strong> validated through live demo.',basis:'3 pursuits'}
+    ],
+    sourcesSummary:'This analysis cites 3 documents across 3 systems. Additional context may exist in systems not connected to this Prism. Consult your program team for supplemental review.'
+  },
+  {
+    id:'nato', name:'NATO IAMD Upgrade Program', bu:'Raytheon', buClass:'raytheon',
+    stage:'Capture', stageClass:'capture', value:'$3.1B', health:'Strong', healthColor:'green', pwin:65,
+    // Edit 5: Softened
+    intel:'Published NATO SoW language suggests <em>potential alignment with existing RTX IAMD capabilities</em>. Multiple allied nations have expressed interest per public reporting and internal BD records.',
+    action:'Schedule joint NATO briefing', actionClass:'engage',
+    // Edit 3: Vision callout instead of cross-domain gate
+    crossDomain:true,
+    timeline:[
+      {date:'Mar 18',text:'Germany confirmed as 6th participating nation'},
+      {date:'Mar 10',text:'NATO NCIA published draft Statement of Work'},
+      {date:'Feb 25',text:'RTX presented at NATO Industry Forum'}
+    ],
+    sources:[
+      {name:'SharePoint IAMD Unclassified Brief',sys:'SharePoint'},
+      {name:'CRM Opportunity Record',sys:'Dynamics 365'},
+      {name:'NATO NCIA Draft SoW',sys:'OSINT'}
+    ],
+    patterns:[
+      {type:'Coalition Pursuit Pattern',body:'Historical RTX pursuit data shows that in NATO consortium pursuits, the winner led with <strong>industrial work-share in all observed cases</strong>. Price was not the deciding factor. Multiple co-sponsor nations before RFP = strongest predictor.',basis:'4 pursuits'},
+      {type:'Competitive Landscape',body:'Public procurement records show EU competitor leveraged industrial base preference in multiple NATO procurements. RTX won 1 by <strong>partnering with EU prime, 60%+ EU work-share</strong>.',basis:'4 competitions'}
+    ],
+    sourcesSummary:'This analysis cites 3 documents across 3 systems. Additional context may exist in systems not connected to this Prism. Consult your program team for supplemental review.'
+  },
+  {
+    id:'kc46', name:'Collins Avionics Retrofit — KC-46', bu:'Collins', buClass:'collins',
+    stage:'Proposal', stageClass:'proposal', value:'$420M', health:'Strong', healthColor:'green', pwin:78,
+    intel:'<em>Sole qualified supplier</em> for cockpit display. Boeing confirmed timeline acceleration.',
+    action:'Finalize BAFO pricing by Apr 2', actionClass:'engage',
+    crossDomain:false,
+    timeline:[
+      {date:'Mar 22',text:'Boeing accelerated BAFO timeline'},
+      {date:'Mar 14',text:'Technical evaluation — RTX scored highest'},
+      {date:'Feb 28',text:'Prototype delivery confirmed on schedule'}
+    ],
+    sources:[
+      {name:'SharePoint KC-46 Proposal Draft',sys:'SharePoint'},
+      {name:'CRM Opportunity Record',sys:'Dynamics 365'},
+      {name:'Boeing Portal — BAFO Request',sys:'Email'}
+    ],
+    patterns:[
+      {type:'Sole-Source Advantage',body:'Historical RTX pursuit data shows <strong>100% win rate</strong> on sole-source with this prime. But final value averaged 8-12% below initial due to BAFO negotiation. Build pricing buffer.',basis:'5 pursuits'},
+      {type:'Customer Timing',body:'Historical RTX pursuit data shows prime accelerated timelines on <strong>3 of 5 retrofits</strong>, compressing 20-30 days. Factor into internal review scheduling.',basis:'5 cycles'}
+    ],
+    sourcesSummary:'This analysis cites 3 documents across 3 systems. All sources are unclassified. View full citations above.'
+  },
+  {
+    id:'gtf', name:'GTF Sustainment Expansion — APAC', bu:'Pratt & Whitney', buClass:'pw',
+    stage:'Evaluation', stageClass:'evaluation', value:'$1.7B', health:'At Risk', healthColor:'red', pwin:35,
+    // Edit 5: Softened
+    intel:'Recent support ticket volume and customer communications suggest <em>increasing delivery concerns</em>. Public reporting indicates competitor offering lower MRO rates.',
+    action:'URGENT — exec engagement', actionClass:'urgent',
+    crossDomain:false,
+    timeline:[
+      {date:'Mar 19',text:'Customer CEO referenced competitor in call'},
+      {date:'Mar 10',text:'Delivery delay — 6-week schedule slip'},
+      {date:'Feb 22',text:'14 escalation tickets in 30-day window'},
+      {date:'Feb 1',text:'Competitor Singapore facility groundbreaking'}
+    ],
+    sources:[
+      {name:'CRM Opportunity Record',sys:'Dynamics 365'},
+      {name:'Teams GTF APAC Channel — 47 messages',sys:'Teams'},
+      {name:'Zendesk — 14 escalation tickets',sys:'Zendesk'},
+      {name:'Reuters — Competitor facility announcement',sys:'OSINT'}
+    ],
+    patterns:[
+      {type:'Recovery Pattern',body:'Historical RTX pursuit data shows that in sentiment-decline situations, <strong>recovery required CEO-to-CEO engagement within 14 days</strong> + contractual delivery guarantee with penalties.',basis:'4 situations'},
+      {type:'Pricing Sensitivity',body:'Historical RTX pursuit data shows <strong>price decided the majority of MRO outcomes</strong> ($1B+). Matching within 5% correlated with significantly higher win rates.',basis:'6 pursuits'},
+      {type:'Competitor Facility Impact',body:'Public reporting indicates new regional MRO facilities within 12 months of decision <strong>shifted outcomes in all observed cases</strong>. Proximity arguments outweigh incumbent advantages.',basis:'3 APAC competitions'}
+    ],
+    sourcesSummary:'This analysis cites 4 documents across 4 systems. Additional context may exist in systems not connected to this Prism. Consult your program team for supplemental review.'
+  },
+  {
+    id:'ddg', name:'Shipboard EW System — DDG Mod', bu:'Raytheon', buClass:'raytheon',
+    stage:'Debrief', stageClass:'debrief', value:'$680M', health:'Lost', healthColor:'red', pwin:0,
+    intel:'Lost on <em>schedule confidence and past performance</em>. Navy cited prior late deliveries.',
+    action:'Capture debrief findings', actionClass:'capture',
+    crossDomain:false,
+    timeline:[
+      {date:'Mar 18',text:'Navy formal debrief completed'},
+      {date:'Mar 5',text:'Award announced — competitor selected'},
+      {date:'Jan 15',text:'Proposal submitted'}
+    ],
+    sources:[
+      {name:'SharePoint DDG EW Debrief Report',sys:'SharePoint'},
+      {name:'CRM Opportunity — Closed-Lost',sys:'Dynamics 365'},
+      {name:'Win/Loss DB — Navy Debrief',sys:'Win/Loss DB'}
+    ],
+    patterns:[
+      {type:'Past Performance Impact',body:'Historical RTX pursuit data shows that in Navy pursuits, <strong>past performance discriminated in the majority of cases</strong>. Any delivery delay in trailing 24 months correlated with significant PWIN reduction.',basis:'6 pursuits'},
+      {type:'Loss Recovery Opportunity',body:'Historical RTX pursuit data shows after loss to this competitor, RTX <strong>won follow-on 2 of 3 times</strong> by addressing debrief weaknesses. Recovery window 18-24 months.',basis:'3 cycles'}
+    ],
+    sourcesSummary:'This analysis cites 3 documents across 3 systems. All sources are unclassified. View full citations above.'
+  },
+  {
+    id:'f135', name:'F135 Engine Overhaul — Saudi Arabia', bu:'Pratt & Whitney', buClass:'pw',
+    stage:'Capture', stageClass:'capture', value:'$560M', health:'Monitor', healthColor:'yellow', pwin:52,
+    // Edit 5: Softened
+    intel:'FMS case approved per public DSCA notification. Internal records indicate <em>offset requirements have increased</em> since initial approval.',
+    action:'Develop offset proposal w/ SAMI', actionClass:'develop',
+    crossDomain:false,
+    timeline:[
+      {date:'Mar 20',text:'Offset requirement raised 25% → 35%'},
+      {date:'Mar 8',text:'DSCA notification approved by Congress'},
+      {date:'Feb 15',text:'P&W team visited Riyadh'}
+    ],
+    sources:[
+      {name:'DSCA FMS Notification',sys:'OSINT'},
+      {name:'CRM Opportunity Record',sys:'Dynamics 365'},
+      {name:'SharePoint FMS Offset Playbook',sys:'SharePoint'}
+    ],
+    patterns:[
+      {type:'Offset Escalation Pattern',body:'Historical RTX pursuit data shows offsets increased post-approval in <strong>4 of 5 FMS pursuits</strong> in region. Pre-negotiated LOI cut response from 60+ to 15 days.',basis:'5 pursuits'},
+      {type:'Regional Decision Factors',body:'Public procurement records show that in engine sustainment evaluations, <strong>in-country industrial participation outweighed price and tech in all observed cases</strong>. All winners committed to local MRO JV.',basis:'3 evaluations'}
+    ],
+    sourcesSummary:'This analysis cites 3 documents across 3 systems. Additional context may exist in systems not connected to this Prism. Consult your program team for supplemental review.'
+  }
+];
+
+// ── RENDER TABLE ──
+function renderTable(filter, buFilter, search) {
+  const tb = document.getElementById('tableBody');
+  tb.innerHTML = '';
+  let filtered = pursuits;
+  if (filter === 'atrisk') filtered = filtered.filter(p => p.health === 'At Risk' || p.health === 'Lost');
+  else if (filter === 'capture') filtered = filtered.filter(p => p.stage === 'Capture');
+  else if (filter === 'proposal') filtered = filtered.filter(p => p.stage === 'Proposal');
+  else if (filter === 'winloss') filtered = filtered.filter(p => p.stage === 'Debrief');
+  if (buFilter && buFilter !== 'All BUs') filtered = filtered.filter(p => p.bu.includes(buFilter === 'Pratt & Whitney' ? 'Pratt' : buFilter));
+  if (search) { const s = search.toLowerCase(); filtered = filtered.filter(p => p.name.toLowerCase().includes(s) || p.bu.toLowerCase().includes(s)); }
+
+  filtered.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.className = 'data-row';
+    tr.dataset.id = p.id;
+    // Edit 2: Removed confidence bars from PWIN cell
+    tr.innerHTML = `
+      <td><div class="pursuit-name"><svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 3 11 8 6 13"/></svg>${p.name}</div></td>
+      <td><span class="bu-badge ${p.buClass}">${p.bu}</span></td>
+      <td><span class="stage-pill ${p.stageClass}">${p.stage}</span></td>
+      <td style="font-weight:600">${p.value}</td>
+      <td><div class="health-dot"><span class="dot ${p.healthColor}"></span>${p.health}</div></td>
+      <td><div class="pwin-cell"><div class="pwin-bar-bg"><div class="pwin-bar" style="width:${p.pwin}%"></div></div><span class="pwin-pct">${p.pwin}%</span></div></td>
+      <td><div class="intel-text"><span class="ai-sparkle">&#9670;</span>${p.intel}</div></td>
+      <td><span class="action-tag ${p.actionClass}"><span class="ai-sparkle">&#9670;</span>${p.action}</span></td>
+    `;
+    tr.onclick = () => toggleDetail(p.id);
+    tb.appendChild(tr);
+
+    // Detail row
+    const dr = document.createElement('tr');
+    dr.className = 'detail-row';
+    dr.id = 'detail-' + p.id;
+    // Edit 3: Vision callout banner for cross-domain pursuits
+    let cdBanner = '';
+    if (p.crossDomain) {
+      cdBanner = `<div class="vision-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><div><strong>Proposed Governance Enhancement</strong> — For pursuits spanning multiple data domains, Glean could hold AI-generated insights for human review before displaying. This capability would be co-developed with RTX Cyber to meet CLARA requirements.</div><span class="proposed-badge">PROPOSED</span></div>`;
+    }
+    // Edit 9: Only show cited sources (green dot)
+    // Edit 4: Pattern cards without scope tags or confidence bars + disclaimer
+    dr.innerHTML = `<td colspan="8" class="detail-cell"><div class="detail-inner">
+      ${cdBanner}
+      <div class="detail-grid">
+        <div><div class="detail-section-title"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><polyline points="8 4 8 8 11 10"/></svg> Recent Activity</div>
+          ${p.timeline.map(t=>`<div class="timeline-item"><span class="timeline-date">${t.date}</span><span class="timeline-text">${t.text}</span><span class="ai-badge-sm">AI</span></div>`).join('')}
+        </div>
+        <div><div class="detail-section-title"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="5" y1="6" x2="11" y2="6"/><line x1="5" y1="10" x2="9" y2="10"/></svg> Cited Sources</div>
+          ${p.sources.map(s=>`<div class="source-item"><span class="source-dot incl"></span><span>${s.name}</span><span class="source-system">${s.sys}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="detail-section-title" style="margin-bottom:4px"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#5e5ce6" opacity=".6"/></svg> AI-Generated Insights from Historical Data</div>
+      <div class="insights-disclaimer">Generated by Glean AI agents analyzing patterns across historical pursuit data. All sources unclassified.</div>
+      <div class="pattern-cards">
+        ${p.patterns.map(pt=>`<div class="pattern-card">
+          <div class="pattern-type">${pt.type}</div>
+          <div class="pattern-body">${pt.body}</div>
+          <div class="pattern-basis">Based on ${pt.basis}</div>
+        </div>`).join('')}
+      </div>
+      <div class="sources-summary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#6e6e73" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>
+        <div>${p.sourcesSummary}</div>
+      </div>
+      <button class="crm-btn" onclick="event.stopPropagation()">Update CRM &#8599;</button>
+    </div></td>`;
+    tb.appendChild(dr);
+  });
+}
+
+let currentTab = 'all';
+let currentBU = 'All BUs';
+const buOptions = ['All BUs','Raytheon','Collins','Pratt & Whitney'];
+let buIndex = 0;
+
+function setTab(el, tab) {
+  document.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab = tab;
+  renderTable(currentTab, currentBU, document.getElementById('searchInput').value);
+}
+function cycleBU() {
+  buIndex = (buIndex + 1) % buOptions.length;
+  currentBU = buOptions[buIndex];
+  document.getElementById('buLabel').textContent = currentBU;
+  renderTable(currentTab, currentBU, document.getElementById('searchInput').value);
+}
+function filterTable() {
+  renderTable(currentTab, currentBU, document.getElementById('searchInput').value);
+}
+function toggleDetail(id) {
+  const row = document.querySelector(`tr.data-row[data-id="${id}"]`);
+  const detail = document.getElementById('detail-' + id);
+  if (row.classList.contains('expanded')) {
+    row.classList.remove('expanded');
+    detail.classList.remove('show');
+  } else {
+    document.querySelectorAll('tr.data-row.expanded').forEach(r => { r.classList.remove('expanded'); document.getElementById('detail-' + r.dataset.id).classList.remove('show'); });
+    row.classList.add('expanded');
+    detail.classList.add('show');
+  }
+}
+
+// ── VIEW SWITCHING ──
+function switchView(v) {
+  document.querySelectorAll('.sidebar-item[data-view]').forEach(i => i.classList.remove('active'));
+  document.querySelector(`.sidebar-item[data-view="${v}"]`).classList.add('active');
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  const viewMap = {capture:'view-capture', intel:'view-intel', markets:'view-markets'};
+  document.getElementById(viewMap[v] || 'view-capture').classList.add('active');
+  const labels = {capture:'Strategic Pursuits — Capture Lead', intel:'Strategic Pursuits — Customer & Market Intelligence', markets:'Strategic Pursuits — Market Opportunities'};
+  document.getElementById('viewLabel').textContent = labels[v] || labels.capture;
+  const avatars = {capture:'RS', intel:'DA', markets:'JM'};
+  document.getElementById('userAvatar').textContent = avatars[v] || 'RS';
+}
+
+// ── SIDEBAR ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('expanded');
+  document.body.classList.toggle('sidebar-open');
+}
+
+// ── MODAL ──
+function openModal() { document.getElementById('scopeModal').classList.add('open'); }
+function closeModal() { document.getElementById('scopeModal').classList.remove('open'); }
+
+// ── CHAT ──
+function toggleChat() {
+  const panel = document.getElementById('chatPanel');
+  const fab = document.getElementById('chatFab');
+  if (panel.classList.contains('open')) { panel.classList.remove('open'); fab.style.display = 'flex'; }
+  else { panel.classList.add('open'); fab.style.display = 'none'; }
+}
+const chatResponses = {
+  loss: `<strong>Win/Loss Pattern Analysis</strong><br><br>Based on connected source data across 47 active pursuits, the top 3 loss factors are:<br>1. Schedule confidence / past performance (39%)<br>2. Price competitiveness (31%)<br>3. Late cross-BU coordination (22%)<br><br>Key insight: In Navy pursuits, historical data shows any delivery delay within 24 months correlates with significant PWIN reduction. The DDG EW loss is the most recent example. Historical patterns suggest RTX has won follow-ons by addressing debrief findings within 18-24 months.`,
+  phantom: `<strong>Phantom Strike Deep Dive</strong><br><br>PWIN: 72% (up from 65% after Bulgaria reference win).<br><br>Based on public contract records and CRM data, RTX has an established presence across multiple target nations. Historical pursuit data shows the strongest competitive lever is installed base leverage + lifecycle cost framing. Losses in similar pursuits were driven by price undercutting.<br><br>Recommended: Leverage Bulgaria and Slovakia wins in the upcoming Jordan proposal. Historical data suggests Q4 submissions show lower conversion — timing matters.`,
+  mosaic: `<strong>How Prism Uses Connected Sources</strong><br><br>Prism analyzes data from 6 connected source systems. Permissions are inherited from RTX Active Directory and source system access controls — the AI can only see documents you have access to.<br><br>For each analysis, Prism cites the specific documents it used. Some pursuits may have additional relevant context in systems not currently connected to this Prism (e.g., classified repositories). In those cases, the analysis notes this and recommends consulting your program team.<br><br>This approach ensures full traceability while being transparent about scope.`,
+  offset: `<strong>FMS Offset Intelligence</strong><br><br>Historical RTX pursuit data shows offsets increased post-approval in 4 of 5 FMS pursuits in the region. The F135 Saudi pursuit offset increase is consistent with this pattern.<br><br>Public procurement records show that in engine sustainment evaluations, in-country industrial participation outweighed price and technical capability in all observed cases. Every winner committed to a local MRO joint venture.<br><br>Historical data shows pre-negotiated LOIs significantly reduced response timelines. With 30 days to the decision point, the SAMI partnership negotiation should be authorized immediately.`,
+  risk: `<strong>At-Risk Pursuit Prioritization</strong><br><br>6 pursuits flagged at-risk, ranked by urgency:<br><br>1. <strong>GTF Sustainment APAC ($1.7B)</strong> — 34 days. Historical data shows executive engagement as the primary recovery mechanism.<br>2. <strong>CCA Sensor Suite ($890M)</strong> — 22 days. Cross-BU cost inputs pending. Escalate to VP Engineering immediately.<br>3. <strong>F135 Saudi ($560M)</strong> — 30 days. Offset gap, no LOI. Authorize SAMI negotiation.<br><br>The single highest-impact executive action is the GTF CEO-to-CEO call based on historical recovery patterns.`,
+  market: `<strong>Market Opportunities Overview</strong><br><br>RTX tracks 6 market segments with a combined 5-year TAM of $62B. Current coverage is 41%, up 3pp vs FY25.<br><br>The biggest gap is <strong>Space-Based ISR & Sensors</strong> — 8% share in an $8.6B segment growing 14% CAGR. Raytheon sensor heritage could transfer but no active pursuits exist today.<br><br>Strategic growth priorities: Electronic Warfare (recovering from DDG loss) and Autonomous Systems (CCA as entry point to $12B+ pipeline). Recommend cross-BU space strategy working group as highest-impact action.`,
+  space: `<strong>Space-Based ISR Gap Analysis</strong><br><br>RTX holds an estimated 8% share in a $8.6B segment growing at 14% CAGR through 2030. This is the largest identified coverage gap.<br><br>Public procurement data shows $4.2B in upcoming opportunities across LEO constellations and space-resilient architecture programs. L3Harris currently leads with SDA Tranche awards.<br><br>Historical RTX pursuit data shows Raytheon sensor heritage (radar, EO/IR) could transfer to space applications. However, no active pursuits exist in this segment today.<br><br><strong>Recommendation:</strong> Stand up cross-BU space strategy working group with Raytheon Sensors & Collins avionics.`,
+  gap: `<strong>Coverage Gap Prioritization</strong><br><br>4 segments are below target coverage:<br><br>1. <strong>Space ISR (8% share)</strong> — Biggest gap, highest growth. No pursuits. Immediate action needed.<br>2. <strong>Autonomous Systems (15%)</strong> — CCA is the entry point. Cross-BU coordination critical.<br>3. <strong>Electronic Warfare (22%)</strong> — Recovery path exists via DDG debrief findings. 18-24 month timeline.<br>4. <strong>Hypersonics (19%)</strong> — Watch category due to funding volatility. Positioned on 2 programs but customer timelines uncertain.<br><br>Highest-impact action: Space strategy working group + CCA cross-BU acceleration.`,
+  mckinsey: `<strong>AI-Assisted Analyses</strong><br><br>This quarter, Prism has generated <strong>1,247 AI-assisted analyses</strong> across pursuit intelligence, competitive analysis, and pipeline reporting.<br><br>These analyses span competitive win/loss pattern detection, customer decision factor analysis, cross-BU coordination risk identification, and pipeline health monitoring. Each analysis cites its source documents for full traceability.<br><br>Previously, this type of analysis required multi-week cycles with external advisory teams. Prism delivers continuously updated analysis from connected source systems.`,
+};
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const container = document.getElementById('chatMessages');
+  container.innerHTML += `<div class="chat-msg user">${escHtml(msg)}</div>`;
+  input.value = '';
+  const lower = msg.toLowerCase();
+  let response = `<strong>Portfolio Summary</strong><br><br>Based on connected source data: 47 active pursuits totaling $14.2B across 3 business units. Win rate trending up at 38% (+4pp vs FY25). 6 pursuits at risk requiring action.<br><br>The biggest opportunity is Phantom Strike ($2.4B, 72% PWIN). The biggest risk is GTF APAC ($1.7B, increasing delivery concerns). The most urgent deadline is CCA Sensor Suite (22 days, pending Collins inputs).<br><br>What would you like to dig into?`;
+  if (lower.match(/loss|win\b/)) response = chatResponses.loss;
+  else if (lower.match(/phantom|radar|f-16|f16/)) response = chatResponses.phantom;
+  else if (lower.match(/mosaic|classified|confidence|scope/)) response = chatResponses.mosaic;
+  else if (lower.match(/offset|saudi|fms/)) response = chatResponses.offset;
+  else if (lower.match(/risk|at.risk|urgent/)) response = chatResponses.risk;
+  else if (lower.match(/market|opportunit|segment|tam|addressable/)) response = chatResponses.market;
+  else if (lower.match(/space|isr|leo|constellation/)) response = chatResponses.space;
+  else if (lower.match(/gap|coverage|underweight/)) response = chatResponses.gap;
+  else if (lower.match(/mckinsey|consultant|saving|displaced|hours|analys/)) response = chatResponses.mckinsey;
+  setTimeout(() => {
+    container.innerHTML += `<div class="chat-msg ai">${response}</div>`;
+    container.scrollTop = container.scrollHeight;
+  }, 400);
+  container.scrollTop = container.scrollHeight;
+}
+function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+// ── MARKET OPPORTUNITIES DATA & RENDER ──
+const marketSegments = [
+  {id:'iamd',name:'Integrated Air & Missile Defense',sub:'Patriot, NASAMS, LTAMDS, IBCS',tam:'$18.4B',share:'34%',coverage:78,coverageColor:'green',assess:'Core',assessClass:'core',competitor:'Lockheed Martin (THAAD)',insight:'Based on public procurement records, <em>allied demand surging post-Ukraine</em>. RTX holds strong position but coverage gap in European co-production requirements.',bus:['raytheon']},
+  {id:'ew',name:'Electronic Warfare & Cyber',sub:'Next-gen EW, cognitive EW, SIGINT',tam:'$9.1B',share:'22%',coverage:55,coverageColor:'amber',assess:'Strategic Growth',assessClass:'growth',competitor:'Northrop Grumman (SEWIP)',insight:'Historical pursuit data shows <em>Navy EW losses driven by past performance</em>. DDG debrief findings suggest recovery path exists within 18-24 months.',bus:['raytheon','collins']},
+  {id:'space',name:'Space-Based ISR & Sensors',sub:'LEO constellations, space-resilient comms',tam:'$8.6B',share:'8%',coverage:22,coverageColor:'red',assess:'Underweight',assessClass:'underweight',competitor:'L3Harris (SDA Tranche)',insight:'Public data shows <em>14% CAGR through 2030</em>. No active RTX pursuits despite Raytheon sensor heritage. Biggest identified gap.',bus:['raytheon']},
+  {id:'uav',name:'Autonomous & Uncrewed Systems',sub:'CCA, loyal wingman, counter-UAS',tam:'$12.3B',share:'15%',coverage:38,coverageColor:'amber',assess:'Strategic Growth',assessClass:'growth',competitor:'General Atomics (MQ-9B)',insight:'CCA Sensor Suite ($890M) is the entry point. Public reporting indicates <em>$12B+ in upcoming programs</em> through 2030. Cross-BU coordination critical.',bus:['raytheon','collins','pw']},
+  {id:'sustainment',name:'Global Engine Sustainment',sub:'Military & commercial MRO, FMS aftermarket',tam:'$11.2B',share:'28%',coverage:62,coverageColor:'amber',assess:'Core',assessClass:'core',competitor:'GE Aerospace (CFM/T700)',insight:'GTF APAC situation highlights <em>competitive pressure from regional facility investments</em>. Historical data shows in-country presence as primary decision factor.',bus:['pw']},
+  {id:'hypersonic',name:'Hypersonics & Advanced Strike',sub:'Boost-glide, scramjet, ARRW follow-on',tam:'$4.8B',share:'19%',coverage:45,coverageColor:'amber',assess:'Watch',assessClass:'watch',competitor:'Lockheed Martin (ARRW/HACM)',insight:'Public DoD budget data shows <em>funding volatility</em> — FY26 request down 12%. RTX positioned on 2 programs but customer timelines uncertain.',bus:['raytheon']}
+];
+
+let currentMktTab = 'all';
+function setMktTab(el, tab) {
+  el.closest('.tabs-bar').querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentMktTab = tab;
+  renderMktTable(currentMktTab);
+}
+
+function renderMktTable(filter) {
+  const tb = document.getElementById('mktTableBody');
+  if (!tb) return;
+  tb.innerHTML = '';
+  let filtered = marketSegments;
+  if (filter === 'underweight') filtered = filtered.filter(m => m.assessClass === 'underweight');
+  else if (filter === 'growth') filtered = filtered.filter(m => m.assessClass === 'growth');
+  else if (filter === 'core') filtered = filtered.filter(m => m.assessClass === 'core');
+
+  filtered.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="mkt-segment-name">${m.name}</div><div class="mkt-segment-sub">${m.sub}</div></td>
+      <td style="font-weight:700">${m.tam}</td>
+      <td style="font-weight:600">${m.share}</td>
+      <td><div style="font-size:12px;font-weight:600">${m.coverage}%</div><div class="pipeline-bar-bg"><div class="pipeline-bar ${m.coverageColor}" style="width:${m.coverage}%"></div></div><div class="pipeline-label">${m.coverage >= 70 ? 'On target' : m.coverage >= 40 ? 'Below target' : 'Significant gap'}</div></td>
+      <td><span class="assess-tag ${m.assessClass}">${m.assess}</span></td>
+      <td style="font-size:12px">${m.competitor}</td>
+      <td><div class="intel-text"><span class="ai-sparkle">&#9670;</span>${m.insight}</div></td>
+      <td><div class="bu-dots">${m.bus.map(b=>`<div class="bu-dot ${b}" title="${b.charAt(0).toUpperCase()+b.slice(1)}"></div>`).join('')}</div></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+// ── INIT ──
+renderTable('all', 'All BUs', '');
+renderMktTable('all');
+</script>
+</body>
+</html>
